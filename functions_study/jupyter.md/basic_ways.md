@@ -45,7 +45,9 @@
         df.to_csv(SaveDestination + '\\' + SaveFileName,encoding = "utf_8_sig",index = False,header=False,mode = 'a+')
 ```
 
-
+## dataframe 中的一列中的数据统一去除掉前n位
 ```Python
-
+    df.iloc[:,1]
+    df[1] = df[1].map(lambda x: str(x)[33:])
+    #在同一列中去除掉前33位
 ```
