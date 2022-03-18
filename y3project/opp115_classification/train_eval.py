@@ -10,6 +10,7 @@ from transformers import AdamW
 
 
 # 权重初始化，默认xavier
+# 初始化网络，暂时没用到
 def init_network(model, method='xavier', exclude='embedding', seed=123):
     for name, w in model.named_parameters():
         if exclude not in name:
@@ -27,11 +28,14 @@ def init_network(model, method='xavier', exclude='embedding', seed=123):
             else:
                 pass
 
-
+# 训练模块
 def train(config, model, train_iter, dev_iter, test_iter):
     start_time = time.time()
     model.train()
+
     crition = torch.nn.BCEWithLogitsLoss()
+    # formula ： BCEWithLogitsLoss()
+    # 十个二分
     param_optimizer = list(model.named_parameters())
     no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
     optimizer_grouped_parameters = [
@@ -78,7 +82,7 @@ def train(config, model, train_iter, dev_iter, test_iter):
             break
     test(config, model, test_iter)
 
-
+# test dataset
 def test(config, model, test_iter):
     # test
     model.load_state_dict(torch.load(config.save_path))

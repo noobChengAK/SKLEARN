@@ -18,6 +18,7 @@ if __name__ == '__main__':
     model_name = args.model  # bert
     x = import_module('models.' + model_name)
     config = x.Config(dataset)
+
     np.random.seed(1)
     torch.manual_seed(1)
     torch.cuda.manual_seed_all(1)
@@ -25,10 +26,13 @@ if __name__ == '__main__':
 
     start_time = time.time()
     print("Loading data...")
+    # 调动dataset（utils），转换成tensor，调整为batch的应用
     train_data, dev_data, test_data = build_dataset(config)
     train_iter = build_iterator(train_data, config)
     dev_iter = build_iterator(dev_data, config)
     test_iter = build_iterator(test_data, config)
+
+# 显示时间
     time_dif = get_time_dif(start_time)
     print("Time usage:", time_dif)
 

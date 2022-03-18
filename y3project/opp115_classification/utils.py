@@ -10,6 +10,7 @@ PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
 
 
 def build_dataset(config):
+    # 将文本变成ID
     def load_dataset(path, class_list, pad_size=32):
         contents = []
         data = pd.read_csv(path)
@@ -21,6 +22,7 @@ def build_dataset(config):
             seq_len = len(token)
             mask = []
             token_ids = config.tokenizer.convert_tokens_to_ids(token)
+            # 是bert的，先分词，再转成id，是模型的输入
             if pad_size:
                 if len(token) < pad_size:
                     mask = [1] * len(token_ids) + [0] * (pad_size - len(token))
@@ -30,6 +32,7 @@ def build_dataset(config):
                     token_ids = token_ids[:pad_size]
                     seq_len = pad_size
                 contents.append((token_ids, tag, seq_len, mask))
+                # 对应ID，标签（10个类别），token没有padding前的长度，padding的mask部分
         return contents
 
     train = load_dataset(config.train_path, config.class_list, config.pad_size)
@@ -39,6 +42,8 @@ def build_dataset(config):
 
 
 class DatasetIterater(object):
+    # 将量变成tensor
+    # 输入的是一个个batch，而不是一条条
     def __init__(self, batches, batch_size, device):
         self.batch_size = batch_size
         self.batches = batches
@@ -51,6 +56,7 @@ class DatasetIterater(object):
 
     def _to_tensor(self, datas):
         x = torch.LongTensor([_[0] for _ in datas]).to(self.device)
+        # x is token id
         y = torch.FloatTensor([_[1] for _ in datas]).to(self.device)
 
         # pad前的长度(超过pad_size的设为pad_size)
