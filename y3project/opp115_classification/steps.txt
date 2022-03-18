@@ -1,0 +1,25 @@
+python load json format
+
+使用for循环
+
+将每个框中的mode分别提取出来，同时也将前面的category扩充出来，例如1对4，扩充成4对4
+	再将每个行中的segmenttext提取出来，提取出来以后，有的写出，没有的写成null
+	再将null的行drop掉
+
+
+2.
+tf-idf
+vectorize
+
+3.
+
+classifier
+selectedText -> attribute value
+
+classifier
+attribute value-> attribute type
+
+classifier
+attribute type -> category  
+
+
